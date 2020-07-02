@@ -47,7 +47,7 @@ def ConvertGeneratedPath(fn):
   if FLAGS.mac_debug:
     genfiles_root = path.join('bazel-out', 'local-dbg', 'genfiles')
   if not FLAGS.mac_debug:
-    genfiles_root = 'bazel-genfiles'
+    genfiles_root = 'bazel-bin'
   return path.realpath(path.join(genfiles_root, GetBasePath(fn)))
 
 def ConvertExternalPath(fn):
@@ -114,8 +114,8 @@ def ExtractIncludes():
   for d in os.listdir('bazel-%s/external' % FLAGS.project):
     if os.path.isdir('bazel-%s/external/%s' % (FLAGS.project, d)):
       includes.append(path.realpath('bazel-%s/external/%s' % (FLAGS.project, d)))
-    if os.path.isdir('bazel-genfiles/external/%s' % d):
-      includes.append(path.realpath('bazel-genfiles/external/%s' % d))
+    if os.path.isdir('bazel-bin/external/%s' % d):
+      includes.append(path.realpath('bazel-bin/external/%s' % d))
 
   return set(includes)
 
@@ -183,7 +183,7 @@ def GenerateCMakeList():
     if FLAGS.mac_debug:
       cmakelist.write("\n    bazel-out/local-dbg/genfiles")
     else:
-      cmakelist.write("\n    %s" % path.realpath("bazel-genfiles"))
+      cmakelist.write("\n    %s" % path.realpath("bazel-bin"))
     cmakelist.write("\n    %s)\n\n" % path.realpath("."))
     if len(defines) > 0:
       cmakelist.write("add_definitions(\n    -D")
